@@ -1,4 +1,4 @@
-# Isolated S6 Collector failure/restore
+# S6 Collector failure/restore
 
 ~~~mermaid
 flowchart LR
@@ -7,4 +7,4 @@ flowchart LR
     Q --> M["Pre/post Loki and Tempo markers confirmed"]
 ~~~
 
-This Collector exercise is separate from the S6 GitOps/Canary and from the P2 snapshot.
+The Collector exercise ran on 2026-09-21 (23:19:10 to 23:19:49 UTC) in the same local Kind cluster as the S6 GitOps/Canary and P2 experiments, at a different time.

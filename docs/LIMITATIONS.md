@@ -1,14 +1,14 @@
 # Limitations and attribution
 
-**Owner:** design, review and verification judgments by the portfolio author; some implementation was assisted by AI tools.
+**Owner:** the portfolio author designed the experiments, set the evidence scope, reviewed the results and made the verification judgments; implementation, command execution and evidence collection were carried out by directing AI agents (Codex and others).
 
-- Evidence is drawn from isolated Kind experiments, a separate Istio routing fixture, a separate Collector fault test, P2-era observability snapshots, and historical EC2 operational artifacts. These are not one continuously connected environment. No AWS EKS operation is asserted.
-- Canary configured weight **25%** is the Rollouts setting, not a measured request fraction. Istio measured distributions are separate bounded samples.
-- Stable ReplicaSet **4/4 Ready**, bad ReplicaSet **0/0** and stable HTTP **200** are a narrow stable-service probe result, not a guarantee across all real clients.
-- S6 failed analysis and an Argo CD state of Synced/Healthy after refresh were observed. **No independent successful post-abort AnalysisRun** was established. Attempts 1–3 were OutOfSync/Degraded before attempt 4 reached Synced/Healthy.
-- The S6 evaluator recorded **12/12 PASS** in its own bounded checklist, with bundle **8/8** digests matching. In a separate earlier evaluation, two bundles remained **HOLD** even though that evaluation's overall state was PASS; there is no systemwide all-green conclusion.
-- The S6 Collector test logged a **wrapper exit-status anomaly** (remote command exit **1**, EXIT trap status **0**). The artifact classified this as wrapper-status behavior, not an observed Collector functional failure. No repeat runtime was claimed.
-- Thanos was verified for **current-data continuity only**, not object-store retention or a backup-and-restore guarantee. The first apply cycle **failed** (the Thanos sidecar exited because Prometheus `external_labels` were absent); the continuity check passed only in the **second cycle** after that divergence was corrected. The artifact records `object_store_claim: false`.
-- Private EC2 historical incident entries are retrospective and their times partly estimated. Monitoring logs do not establish an aggregate uptime or mean restoration-time improvement.
-- No large-scale high availability, multi-cluster failover, security certification, public deployment or general end-to-end operational readiness is established.
-- Examples are concepts only; the raw operational implementation and private evidence are not included.
+- Evidence comes from experiments run separately on the same local Kind cluster (S6 GitOps/Canary, S6 Collector fault, P2 Istio) and from historical operational artifacts of a separate EC2 VM.
+- Canary configured weight **25%** is the Rollouts setting. In P2, setWeight 25 with 4 replicas gave 1 canary / 3 stable pods (`kubectl get rs`); request share was not measured. Istio distributions are two n=100 samples.
+- After abort, stable ReplicaSet **4/4 Ready**, bad ReplicaSet **0/0** and one stable-service HTTP check returning **200** were recorded.
+- S6 recorded a Failed AnalysisRun; after one refresh annotation and one Application patch, four Argo CD state checks gave OutOfSync/Degraded (checks 1-3) and **Synced/Healthy** (check 4). No AnalysisRun was recorded after the abort; a successful canary AnalysisRun was recorded before it (2026-09-22 00:30:18 to 00:30:38 UTC).
+- The S6 evidence bundle matched **8/8** SHA-256 digests at 2026-09-22 00:48:46 UTC.
+- In the S6 Collector run the remote command wrapper reported exit **1**; in a separate isolated reproduction the EXIT trap printed `TRAP_RC=0`. The artifact classified this as a wrapper-status artifact. The fault log contains one scale-down/restore cycle.
+- Thanos was verified for **current-data continuity**; object-store retention and backup/restore were not measured. The first apply cycle **failed** (the Thanos sidecar exited because Prometheus `external_labels` were absent); the continuity check passed in the **second cycle** after that divergence was corrected.
+- EC2 incident entries come from a backfill script: Incident A's end time is an upper-bound estimate, Incident B's start is the time the local cause was confirmed. Uptime percentage and mean restoration time were not measured.
+- Environments: one local Kind cluster (lab runs) and one EC2 VM (historical records).
+- Examples under `examples/` are concept illustrations; the raw operational implementation and private evidence are kept private.

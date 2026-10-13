@@ -1,5 +1,5 @@
-# Illustrated concept only. Incomplete; not a deployable manifest.
-# setWeight is configuration, not measured request share.
+# Illustrated concept only; incomplete manifest.
+# setWeight is the configured canary weight.
 apiVersion: argoproj.io/v1alpha1
 kind: Rollout
 metadata:

@@ -1,4 +1,4 @@
-# Generalized example: a metric gate, not an original deployed template.
+# Generalized example of a metric gate.
 # Any monitoring endpoint and access details are deliberately omitted.
 apiVersion: argoproj.io/v1alpha1
 kind: AnalysisTemplate

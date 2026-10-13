@@ -1,22 +1,21 @@
-# Distinct environments: no implied interconnect
+# Experiment map: one local Kind cluster plus an EC2 record
 
 ~~~mermaid
 flowchart TB
-  subgraph A["A: EC2 personal workload (historical)"]
+  subgraph A["A: EC2 personal workload (separate VM, historical)"]
     A1["PowerShell / SSH"] --> A2["systemd service"] --> A3["Operations records"]
   end
-  subgraph B["B: Kind GitOps / Canary (S6)"]
-    B1["Local bare Git"] --> B2["Argo CD"] --> B3["Rollouts + probe"]
-  end
-  subgraph C["C: Istio fixture (P2)"]
-    C1["VirtualService weights"] --> C2["Observed response counts"]
-  end
-  subgraph D["D: Collector fault (S6 separate)"]
-    D1["Replica scale-down/up"] --> D2["Probe + telemetry markers"]
-  end
-  subgraph E["E: P2 observability snapshots"]
-    E1["Recorded metrics/logs/traces"] --> E2["Snapshot assessment"]
+  subgraph K["Local Kind cluster: experiments run separately"]
+    subgraph B["B: GitOps / Canary (S6)"]
+      B1["Local bare Git"] --> B2["Argo CD"] --> B3["Rollouts + probe"]
+    end
+    subgraph C["C: Istio (P2)"]
+      C1["VirtualService weights"] --> C2["Observed response counts"]
+    end
+    subgraph D["D: Collector fault (S6)"]
+      D1["Replica scale-down/up"] --> D2["Probe + telemetry markers"]
+    end
   end
 ~~~
 
-The diagram intentionally has no edges between distinct subgraphs; it does not represent one production pipeline or an AWS EKS deployment.
+The experiments B, C and D ran at different times on the same local Kind cluster; A is a record from a separate VM.
