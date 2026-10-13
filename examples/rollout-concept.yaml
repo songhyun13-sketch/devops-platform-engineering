@@ -1,0 +1,30 @@
+# Illustrated concept only. Incomplete; not a deployable manifest.
+# setWeight is configuration, not measured request share.
+apiVersion: argoproj.io/v1alpha1
+kind: Rollout
+metadata:
+  name: sample-web
+spec:
+  replicas: 4
+  selector:
+    matchLabels:
+      app: sample-web
+  template:
+    metadata:
+      labels:
+        app: sample-web
+    spec:
+      containers:
+        - name: web
+          image: example.invalid/sample-web:placeholder
+  strategy:
+    canary:
+      stableService: sample-web-stable
+      canaryService: sample-web-canary
+      steps:
+        - setWeight: 25
+        - analysis:
+            templates:
+              - templateName: conceptual-probe
+        - pause:
+            duration: 20s

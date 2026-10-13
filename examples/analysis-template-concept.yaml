@@ -1,0 +1,17 @@
+# Generalized example: a metric gate, not an original deployed template.
+# Any monitoring endpoint and access details are deliberately omitted.
+apiVersion: argoproj.io/v1alpha1
+kind: AnalysisTemplate
+metadata:
+  name: conceptual-probe
+spec:
+  metrics:
+    - name: sample-probe-rate
+      count: 3
+      interval: 10s
+      failureLimit: 1
+      successCondition: result[0] >= 0.99
+      provider:
+        prometheus:
+          address: https://metrics.example.invalid
+          query: avg(avg_over_time(probe_success{job="sample-canary"}[20s]))
