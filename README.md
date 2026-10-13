@@ -1,4 +1,4 @@
-# DevOps / Platform Engineering 포트폴리오 (한국어)
+# DevOps / Platform Engineering 포트폴리오
 
 GitOps, Canary 자동 중단, Collector 장애 주입, 운영 기록에 관한 검증 사례를 정리한 포트폴리오입니다. Kind GitOps/Canary·Istio·Collector 실험은 같은 로컬 Kind 클러스터에서 목적과 시점을 달리해 따로 실행했고(S6: 2026-09-21 23:03 ~ 09-22 00:49 UTC, P2: 2026-09-21), EC2 개인 서비스는 별도 VM의 기록입니다.
 
